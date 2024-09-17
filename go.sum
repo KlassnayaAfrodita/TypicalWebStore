@@ -1,0 +1,6 @@
+github.com/KlassnayaAfrodita/mylib v0.0.0-20240917202117-ce8160e0d928 h1:nZHZUo0ka/n09Q+DxpuranND4SRdFUbpMjrbAdgSHBE=
+github.com/KlassnayaAfrodita/mylib v0.0.0-20240917202117-ce8160e0d928/go.mod h1:cew77B8lXQOqYV2b4VvrM38l1eYjvGPZHxq/AeI3NHA=
+github.com/gorilla/mux v1.8.1 h1:TuBL49tXwgrFYWhqrNgrUNEY92u81SPhu7sTdzQEiWY=
+github.com/gorilla/mux v1.8.1/go.mod h1:AKf9I4AEqPTmMytcMc0KkNouC66V3BtZ4qD5fmWSiMQ=
+github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
+github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=

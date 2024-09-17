@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./handlers/handlers"
+	"github.com/KlassnayaAfrodita/projext-net/storage"
 	"net/http"
 )
 

@@ -34,7 +34,23 @@ type Api struct {
 
 func (api *Api) GetAllProduct(w http.ResponseWriter, r *http.Request) {
 	// w.Write([]byte("hello"))
-	products, err := api.users.GetUser(id).GetProducts()
+	cookie, err := r.Cookie("session_id")
+	if err != nil {
+		http.Error(w, `{"error": "you dont auth"}`, 400)
+		return
+	}
+	userId, err := api.session.GetSession(cookie.Value)
+	if err != nil {
+		http.Error(w, `{"error": "db error"}`, 500)
+		return
+	}
+	user, err := api.users.GetUser(userId)
+	if err != nil {
+		http.Error(w, `{"error": "db error"}`, 500)
+		return
+	}
+
+	products, err := user.Cart.GetProducts()
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 	}
@@ -47,7 +63,23 @@ func (api *Api) GetAllProduct(w http.ResponseWriter, r *http.Request) {
 	w.Write(resp)
 }
 
-func (c *storage.User) GetProduct(w http.ResponseWriter, r *http.Request) {
+func (api *Api) GetProduct(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("session_id")
+	if err != nil {
+		http.Error(w, `{"error": "you dont auth"}`, 400)
+		return
+	}
+	userId, err := api.session.GetSession(cookie.Value)
+	if err != nil {
+		http.Error(w, `{"error": "db error"}`, 500)
+		return
+	}
+	user, err := api.users.GetUser(userId)
+	if err != nil {
+		http.Error(w, `{"error": "db error"}`, 500)
+		return
+	}
+
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["product_id"])
 	if err != nil {
@@ -55,7 +87,7 @@ func (c *storage.User) GetProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	product, err := c.Cart.GetProduct(id)
+	product, err := user.Cart.GetProduct(id)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
 		return
@@ -70,7 +102,24 @@ func (c *storage.User) GetProduct(w http.ResponseWriter, r *http.Request) {
 	w.Write(resp)
 }
 
-func (c *storage.User) AddProduct(w http.ResponseWriter, r *http.Request) { //! ожидается json с новым пользователем
+func (api *Api) AddProduct(w http.ResponseWriter, r *http.Request) { //! ожидается json с новым пользователем
+
+	cookie, err := r.Cookie("session_id")
+	if err != nil {
+		http.Error(w, `{"error": "you dont auth"}`, 400)
+		return
+	}
+	userId, err := api.session.GetSession(cookie.Value)
+	if err != nil {
+		http.Error(w, `{"error": "db error"}`, 500)
+		return
+	}
+	user, err := api.users.GetUser(userId)
+	if err != nil {
+		http.Error(w, `{"error": "db error"}`, 500)
+		return
+	}
+
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -90,7 +139,7 @@ func (c *storage.User) AddProduct(w http.ResponseWriter, r *http.Request) { //! 
 		return
 	}
 
-	_, err = c.Cart.AddProduct(product)
+	_, err = user.Cart.AddProduct(product)
 	if err != nil {
 		http.Error(w, `"error":"db error"`, 500)
 	}
@@ -98,7 +147,24 @@ func (c *storage.User) AddProduct(w http.ResponseWriter, r *http.Request) { //! 
 	w.Write([]byte(body))
 }
 
-func (c *storage.User) ChangeProduct(w http.ResponseWriter, r *http.Request) { //! получаем json полного пользователя
+func (api *Api) ChangeProduct(w http.ResponseWriter, r *http.Request) { //! получаем json полного пользователя
+
+	cookie, err := r.Cookie("session_id")
+	if err != nil {
+		http.Error(w, `{"error": "you dont auth"}`, 400)
+		return
+	}
+	userId, err := api.session.GetSession(cookie.Value)
+	if err != nil {
+		http.Error(w, `{"error": "db error"}`, 500)
+		return
+	}
+	user, err := api.users.GetUser(userId)
+	if err != nil {
+		http.Error(w, `{"error": "db error"}`, 500)
+		return
+	}
+
 	if r.Method != http.MethodPut {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -118,7 +184,7 @@ func (c *storage.User) ChangeProduct(w http.ResponseWriter, r *http.Request) { /
 		return
 	}
 
-	_, err = c.Cart.ChangeProducts(product)
+	_, err = user.Cart.ChangeProducts(product)
 	if err != nil {
 		http.Error(w, `"error":"db error"`, 500)
 		return
@@ -126,7 +192,7 @@ func (c *storage.User) ChangeProduct(w http.ResponseWriter, r *http.Request) { /
 	w.Write(body)
 }
 
-func (c *storage.User) DeleteProduct(w http.ResponseWriter, r *http.Request) { //! получаем только id
+func (api *Api) DeleteProduct(w http.ResponseWriter, r *http.Request) { //! получаем только id
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["product_id"])
 	if err != nil {
@@ -134,13 +200,13 @@ func (c *storage.User) DeleteProduct(w http.ResponseWriter, r *http.Request) { /
 		return
 	}
 
-	product, err := c.Cart.GetProduct(id)
+	product, err := api.Cart.GetProduct(id)
 	if err != nil {
 		http.Error(w, `"error":"db error"`, 500)
 		return
 	}
 
-	product, err = c.Cart.DeleteProduct(product)
+	product, err = api.Cart.DeleteProduct(product)
 	if err != nil {
 		http.Error(w, `"error":"db error"`, 500)
 		return

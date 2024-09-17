@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"GOLANG/net/projext-net/storage"
+	"github.com/KlassnayaAfrodita/projext-net/storage"
 	"encoding/json"
 	"io"
 	"net/http"

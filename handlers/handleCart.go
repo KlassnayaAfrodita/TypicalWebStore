@@ -32,6 +32,13 @@ type Api struct {
 	users   *storage.UserStorage
 }
 
+func NewApi() *Api {
+	return &Api{
+		session: storage.NewSession(),
+		users: storage.NewUser(),
+	}
+}
+
 func (api *Api) GetAllProduct(w http.ResponseWriter, r *http.Request) {
 	// w.Write([]byte("hello"))
 	cookie, err := r.Cookie("session_id")

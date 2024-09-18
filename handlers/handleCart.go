@@ -10,23 +10,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// type Result struct {
-// 	Body interface{} `json:"body,omitempty"` //! это для того, чтобы можно было юзать разные типы
-// 	Err  string      `json:"err,omitempty"`
-// }
-
-// func (r *Result) formResult(field string) ([]byte, error) {
-// 	body := map[string]interface{}{
-// 		field: r.Body,
-// 	}
-// 	ret
-// }
-
-// type User struct {
-// 	cart storage.ProductStore
-// 	user *storage.User
-// }
-
 type Api struct {
 	session *storage.Session
 	users   *storage.UserStorage

@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/KlassnayaAfrodita/projext-net/storage"
+	"github.com/KlassnayaAfrodita/mylib/storage"
 	"encoding/json"
 	"io"
 	"net/http"

@@ -28,7 +28,7 @@ func (api *Api) AuthUser(w http.ResponseWriter, r *http.Request) { //! прин�
 		return
 	}
 
-	trueUser, err := api.users.GetUserByName(user.Name)
+	trueUser, err := api.users.GetUser(user.ID)
 	if err != nil {
 		http.Error(w, `{"error":"not found"}`, 404)
 	}

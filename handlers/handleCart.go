@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/KlassnayaAfrodita/mylib/storage"
+	"GOLANG/net/projext-net/storage"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -193,6 +193,23 @@ func (api *Api) ChangeProduct(w http.ResponseWriter, r *http.Request) { //! по
 }
 
 func (api *Api) DeleteProduct(w http.ResponseWriter, r *http.Request) { //! получаем только id
+
+	cookie, err := r.Cookie("session_id")
+	if err != nil {
+		http.Error(w, `{"error": "you dont auth"}`, 400)
+		return
+	}
+	userId, err := api.session.GetSession(cookie.Value)
+	if err != nil {
+		http.Error(w, `{"error": "db error"}`, 500)
+		return
+	}
+	user, err := api.users.GetUser(userId)
+	if err != nil {
+		http.Error(w, `{"error": "db error"}`, 500)
+		return
+	}
+
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["product_id"])
 	if err != nil {
@@ -200,13 +217,13 @@ func (api *Api) DeleteProduct(w http.ResponseWriter, r *http.Request) { //! по
 		return
 	}
 
-	product, err := api.Cart.GetProduct(id)
+	product, err := user.Cart.GetProduct(id)
 	if err != nil {
 		http.Error(w, `"error":"db error"`, 500)
 		return
 	}
 
-	product, err = api.Cart.DeleteProduct(product)
+	product, err = user.Cart.DeleteProduct(product)
 	if err != nil {
 		http.Error(w, `"error":"db error"`, 500)
 		return

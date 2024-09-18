@@ -18,7 +18,7 @@ type Api struct {
 func NewApi() *Api {
 	return &Api{
 		session: storage.NewSession(),
-		users: storage.NewUser(),
+		users: storage.NewUserStorage(),
 	}
 }
 

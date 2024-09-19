@@ -99,7 +99,7 @@ func (api *Api) LogoutUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if _, ok := api.session.GetSession(sess.Value); !ok { //* если не нашли сессию в бд
+	if _, err = api.session.GetSession(sess.Value); err != nil { //* если не нашли сессию в бд
 		http.Error(w, `{"error":"no session"`, 401)
 		return
 	}

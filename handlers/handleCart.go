@@ -32,12 +32,12 @@ func (api *Api) GetAllCart(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"error": "you dont auth"}`, 400)
 		return
 	}
-	userId, err := api.session.GetSession(cookie.Value)
+	userID := api.session.GetSession(cookie.Value)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
 		return
 	}
-	user, err := api.users.GetUser(userId)
+	user, err := api.users.GetUser(userID)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
 		return

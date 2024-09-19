@@ -62,6 +62,8 @@ func (s *Session) SetSession(userID int) (string, error) {
 	return SID, nil
 }
 
-func (s *Session) DeleteSession(key string) {
+func (s *Session) DeleteSession(key string) int {
+	userID := s.sessions[key]
 	delete(s.sessions, key)
+	return userID
 }

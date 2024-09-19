@@ -14,14 +14,14 @@ import (
 type Api struct {
 	session        *storage.Session
 	users          *storage.UserStorage
-	productStorage *storage.ProductStore
+	productStorage *storage.ProductStorage
 }
 
 func NewApi() *Api {
 	return &Api{
 		session:        storage.NewSession(),
 		users:          storage.NewUserStorage(),
-		productStorage: storage.NewProductStore(),
+		productStorage: storage.NewProductStorage(),
 	}
 }
 
@@ -139,7 +139,7 @@ func (api *Api) AddProductCart(w http.ResponseWriter, r *http.Request) { //! о�
 
 	//! меняем базу всех продуктов
 	product.Quantity--
-	storage.ProductStore.ChangeProduct(product)
+	api.productStorage.ChangeProduct(product)
 
 	w.Write([]byte(body))
 }

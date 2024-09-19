@@ -93,22 +93,23 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 
 func (api *Api) LogoutUser(w http.ResponseWriter, r *http.Request) {
 
-	session, err := r.Cookie("session_id")
+	sess, err := r.Cookie("session_id")
 	if err != nil {
 		http.Error(w, `{"error":"you dont auth"}`, 500)
 		return
 	}
 
-	if _, ok := api.session[session.Value]; !ok { //* если не нашли сессию в бд
-		http.Error(w, `no sess`, 401)
+	if _, ok := api.session.GetSession(sess.Value); !ok { //* если не нашли сессию в бд
+		http.Error(w, `{"error":"no session"`, 401)
 		return
 	}
 
-	_, err = api.session.DeleteSession(session.Value)
+	_, err = api.session.DeleteSession(sess.Value)
 	if err != nil {
 		http.Error(w, `{"error":"db error"}`, 500)
+		return
 	}
 
-	session.Expires = time.Now().AddDate(0, 0, -1)
-	http.SetCookie(w, session)
+	sess.Expires = time.Now().AddDate(0, 0, -1)
+	http.SetCookie(w, sess)
 }

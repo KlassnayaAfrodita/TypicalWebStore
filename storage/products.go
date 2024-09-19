@@ -15,20 +15,20 @@ type Product struct {
 	About    string  `json:"product_about"`
 }
 
-type ProductStore struct {
+type ProductStorage struct {
 	products map[int]Product
 	mu       *sync.RWMutex
 	nextID   int
 }
 
-func NewProductStore() *ProductStore {
-	return &ProductStore{
+func NewProductStore() *ProductStorage {
+	return &ProductStorage{
 		products: map[int]Product{},
 		mu:       &sync.RWMutex{},
 	}
 }
 
-func (ps *ProductStore) AddProduct(product Product) (Product, error) {
+func (ps *ProductStorage) AddProduct(product Product) (Product, error) {
 	ps.mu.Lock()
 	defer ps.mu.Unlock()
 
@@ -39,7 +39,7 @@ func (ps *ProductStore) AddProduct(product Product) (Product, error) {
 	return product, nil
 }
 
-func (ps *ProductStore) GetProduct(id int) (Product, error) {
+func (ps *ProductStorage) GetProduct(id int) (Product, error) {
 	ps.mu.RLock()
 	defer ps.mu.RUnlock()
 
@@ -51,7 +51,7 @@ func (ps *ProductStore) GetProduct(id int) (Product, error) {
 	return product, nil
 }
 
-func (ps *ProductStore) GetProducts() ([]Product, error) {
+func (ps *ProductStorage) GetProducts() ([]Product, error) {
 	result := make([]Product, 0, len(ps.products))
 
 	ps.mu.RLock()
@@ -64,7 +64,7 @@ func (ps *ProductStore) GetProducts() ([]Product, error) {
 	return result, nil
 }
 
-func (ps *ProductStore) ChangeProduct(in Product) (Product, error) {
+func (ps *ProductStorage) ChangeProduct(in Product) (Product, error) {
 	_, ok := ps.products[in.ID]
 
 	if !ok {
@@ -75,7 +75,7 @@ func (ps *ProductStore) ChangeProduct(in Product) (Product, error) {
 	return in, nil
 }
 
-func (ps *ProductStore) DeleteProduct(in Product) (Product, error) {
+func (ps *ProductStorage) DeleteProduct(in Product) (Product, error) {
 	product, ok := ps.products[in.ID]
 
 	if !ok {

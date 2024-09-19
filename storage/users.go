@@ -7,10 +7,10 @@ import (
 // var NotFound = errors.New("not found")
 
 type User struct {
-	ID       int           `json:"user_id"`
-	Name     string        `json:"user_name"`
-	Password string        `json:"user_passwords"`
-	Cart     *ProductStore `json:"user_cart"`
+	ID       int             `json:"user_id"`
+	Name     string          `json:"user_name"`
+	Password string          `json:"user_passwords"`
+	Cart     *ProductStorage `json:"user_cart"`
 }
 
 type UserStorage struct {

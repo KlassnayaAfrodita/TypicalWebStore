@@ -134,6 +134,10 @@ func (api *Api) AddProduct(w http.ResponseWriter, r *http.Request) { //! ожи�
 		http.Error(w, `"error":"db error"`, 500)
 	}
 
+	//! меняем базу всех продуктов
+	product.Quantity--
+	storage.ProductStore.ChangeProduct(product)
+
 	w.Write([]byte(body))
 }
 
@@ -174,7 +178,7 @@ func (api *Api) ChangeProduct(w http.ResponseWriter, r *http.Request) { //! по
 		return
 	}
 
-	_, err = user.Cart.ChangeProducts(product)
+	_, err = user.Cart.ChangeProduct(product)
 	if err != nil {
 		http.Error(w, `"error":"db error"`, 500)
 		return

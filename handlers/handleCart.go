@@ -14,14 +14,14 @@ import (
 type Api struct {
 	session        *storage.Session
 	users          *storage.UserStorage
-	productStorage *storage.ProductStorage
+	productStorage *storage.ProductStore
 }
 
 func NewApi() *Api {
 	return &Api{
 		session:        storage.NewSession(),
 		users:          storage.NewUserStorage(),
-		productStorage: storage.NewProductStorage(),
+		productStorage: storage.NewProductStore(),
 	}
 }
 

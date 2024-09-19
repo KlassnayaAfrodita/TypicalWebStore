@@ -64,7 +64,7 @@ func (ps *ProductStore) GetProducts() ([]Product, error) {
 	return result, nil
 }
 
-func (ps *ProductStore) ChangeProducts(in Product) (Product, error) {
+func (ps *ProductStore) ChangeProduct(in Product) (Product, error) {
 	_, ok := ps.products[in.ID]
 
 	if !ok {

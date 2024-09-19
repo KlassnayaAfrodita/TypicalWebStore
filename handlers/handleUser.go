@@ -90,3 +90,25 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/products", 200)
 }
+
+func (api *Api) LogoutUser(w http.ResponseWriter, r *http.Request) {
+
+	session, err := r.Cookie("session_id")
+	if err != nil {
+		http.Error(w, `{"error":"you dont auth"}`, 500)
+		return
+	}
+
+	if _, ok := api.session[session.Value]; !ok { //* если не нашли сессию в бд
+		http.Error(w, `no sess`, 401)
+		return
+	}
+
+	_, err = api.session.DeleteSession(session.Value)
+	if err != nil {
+		http.Error(w, `{"error":"db error"}`, 500)
+	}
+
+	session.Expires = time.Now().AddDate(0, 0, -1)
+	http.SetCookie(w, session)
+}

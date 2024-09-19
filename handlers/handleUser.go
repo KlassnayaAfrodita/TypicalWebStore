@@ -9,7 +9,7 @@ import (
 	"github.com/KlassnayaAfrodita/mylib/storage"
 )
 
-func (api *Api) AuthUser(w http.ResponseWriter, r *http.Request) { //! принимаем POST json
+func (api *Api) AuthenticationUser(w http.ResponseWriter, r *http.Request) { //! принимаем POST json
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return

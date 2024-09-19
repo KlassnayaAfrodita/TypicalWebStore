@@ -1,30 +1,31 @@
 package handlers
 
 import (
-	"github.com/KlassnayaAfrodita/mylib/storage"
 	"encoding/json"
 	"io"
 	"net/http"
 	"strconv"
 
+	"github.com/KlassnayaAfrodita/mylib/storage"
+
 	"github.com/gorilla/mux"
 )
 
 type Api struct {
-	session *storage.Session
-	users   *storage.UserStorage
+	session        *storage.Session
+	users          *storage.UserStorage
 	productStorage *storage.ProductStorage
 }
 
 func NewApi() *Api {
 	return &Api{
-		session: storage.NewSession(),
-		users: storage.NewUserStorage(),
+		session:        storage.NewSession(),
+		users:          storage.NewUserStorage(),
 		productStorage: storage.NewProductStorage(),
 	}
 }
 
-func (api *Api) GetAllProduct(w http.ResponseWriter, r *http.Request) {
+func (api *Api) GetAllCart(w http.ResponseWriter, r *http.Request) {
 	// w.Write([]byte("hello"))
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
@@ -55,7 +56,7 @@ func (api *Api) GetAllProduct(w http.ResponseWriter, r *http.Request) {
 	w.Write(resp)
 }
 
-func (api *Api) GetProduct(w http.ResponseWriter, r *http.Request) {
+func (api *Api) GetProductCart(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
 		http.Error(w, `{"error": "you dont auth"}`, 400)
@@ -94,7 +95,7 @@ func (api *Api) GetProduct(w http.ResponseWriter, r *http.Request) {
 	w.Write(resp)
 }
 
-func (api *Api) AddProduct(w http.ResponseWriter, r *http.Request) { //! ожидается json с новым пользователем
+func (api *Api) AddProductCart(w http.ResponseWriter, r *http.Request) { //! ожидается json с новым пользователем
 
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
@@ -143,7 +144,7 @@ func (api *Api) AddProduct(w http.ResponseWriter, r *http.Request) { //! ожи�
 	w.Write([]byte(body))
 }
 
-func (api *Api) ChangeProduct(w http.ResponseWriter, r *http.Request) { //! получаем json полного пользователя
+func (api *Api) ChangeProductCart(w http.ResponseWriter, r *http.Request) { //! получаем json полного пользователя
 
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
@@ -188,7 +189,7 @@ func (api *Api) ChangeProduct(w http.ResponseWriter, r *http.Request) { //! по
 	w.Write(body)
 }
 
-func (api *Api) DeleteProduct(w http.ResponseWriter, r *http.Request) { //! получаем только id
+func (api *Api) DeleteProductCart(w http.ResponseWriter, r *http.Request) { //! получаем только id
 
 	cookie, err := r.Cookie("session_id")
 	if err != nil {

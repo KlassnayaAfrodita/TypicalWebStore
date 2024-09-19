@@ -11,6 +11,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// xnjnj gbit
+
 type Api struct {
 	session        *storage.Session
 	users          *storage.UserStorage

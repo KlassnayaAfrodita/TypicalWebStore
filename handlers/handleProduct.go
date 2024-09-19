@@ -19,3 +19,7 @@ func (api *Api) GetAllProduct(w http.ResponseWriter, r *http.Request) {
 
 	w.Write(resp)
 }
+
+func (api *Api) GetProduct(w http.ResponseWriter, r *http.Request) {
+
+}

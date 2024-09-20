@@ -138,12 +138,24 @@ func (api *Api) AddProductCart(w http.ResponseWriter, r *http.Request) { //! о�
 	}
 
 	//! меняем базу всех продуктов
-	product.Quantity--
-	api.productStorage.ChangeProduct(product)
+	productOrigin, err := api.productStorage.GetProduct(product.ID)
+	if err != nil {
+		http.Error(w, `"error":"product not found"`, 404)
+		return
+	}
 
-	w.Write([]byte(body))
+	if productOrigin.Quantity-product.Quantity < 0 {
+		http.Error(w, `{"error":"product is missing"}`, 400)
+		return
+	}
+
+	productOrigin.Quantity = productOrigin.Quantity - product.Quantity
+	api.productStorage.ChangeProduct(productOrigin)
+
+	http.Redirect(w, r, "/cart", 200)
 }
 
+// TODO если изменено количество, то уменьшить количество.
 func (api *Api) ChangeProductCart(w http.ResponseWriter, r *http.Request) { //! получаем json полного пользователя
 
 	cookie, err := r.Cookie("session_id")

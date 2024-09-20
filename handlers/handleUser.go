@@ -58,6 +58,7 @@ func (api *Api) AuthenticationUser(w http.ResponseWriter, r *http.Request) { //!
 
 	w.Header().Set("Content-Type", "application/json")
 	http.SetCookie(w, &cookie)
+	r.AddCookie(&cookie)
 
 	http.Redirect(w, r, "/products", 200)
 }
@@ -115,6 +116,7 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	http.SetCookie(w, &cookie)
+	r.AddCookie(&cookie)
 
 	http.Redirect(w, r, "/products", 200)
 }

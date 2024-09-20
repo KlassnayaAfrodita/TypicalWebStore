@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"time"
@@ -58,7 +57,7 @@ func (api *Api) AuthenticationUser(w http.ResponseWriter, r *http.Request) { //!
 
 	w.Header().Set("Content-Type", "application/json")
 	http.SetCookie(w, &cookie)
-	r.AddCookie(&cookie)
+	// r.AddCookie(&cookie)
 
 	http.Redirect(w, r, "/products", 200)
 }
@@ -74,7 +73,7 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 		logger.Error("error", err)
 		return
 	}
-	fmt.Printf("body: %s\n", string(body))
+	// fmt.Printf("body: %s\n", string(body))
 	defer r.Body.Close()
 
 	var user storage.User
@@ -87,7 +86,7 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user.Cart = storage.NewProductStorage()
-	fmt.Println(user.Cart)
+	// fmt.Println(user.Cart)
 
 	user, err = api.users.AddUser(user) //! добавили пользоавтеля в бд
 	if err != nil {
@@ -96,7 +95,7 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(user)
+	// fmt.Println(user)
 
 	SID, err := api.session.SetSession(user.ID) //! добавили сессию
 	if err != nil {
@@ -105,8 +104,8 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(api.users)
-	fmt.Println(api.session)
+	// fmt.Println(api.users)
+	// fmt.Println(api.session)
 
 	cookie := http.Cookie{
 		Name:    "session_id",
@@ -116,7 +115,7 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	http.SetCookie(w, &cookie)
-	r.AddCookie(&cookie)
+	// r.AddCookie(&cookie)
 
 	http.Redirect(w, r, "/products", 200)
 }

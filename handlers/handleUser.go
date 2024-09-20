@@ -94,6 +94,8 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println(user)
+
 	SID, err := api.session.SetSession(user.ID) //! добавили сессию
 	if err != nil {
 		http.Error(w, `{"error":"db error"}`, 500)
@@ -101,7 +103,7 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(&api.users.ID, api.users.Name, api.users.Password, api.users.ProductStorage)
+	fmt.Println(&api.users)
 	fmt.Println(&api.session)
 
 	cookie := http.Cookie{

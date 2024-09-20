@@ -40,6 +40,7 @@ func (api *Api) GetProduct(w http.ResponseWriter, r *http.Request) { //! у на
 	resp, err := json.Marshal(product)
 	if err != err {
 		http.Error(w, `{"error":"json error"}`, 500)
+		return
 	}
 
 	w.Write(resp)

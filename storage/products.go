@@ -28,7 +28,7 @@ type ProductStorage struct {
 	nextID   int
 }
 
-func NewProductStore() *ProductStorage {
+func NewProductStorage() *ProductStorage {
 	return &ProductStorage{
 		products: map[int]Product{},
 		mu:       &sync.RWMutex{},

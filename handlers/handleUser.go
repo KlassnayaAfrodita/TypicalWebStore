@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"time"
@@ -66,12 +67,14 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, `{"error": "server error"}`, 500)
 		return
 	}
+	fmt.Printf("body: %s\n", string(body))
 	defer r.Body.Close()
 
 	var user storage.User
 
 	err = json.Unmarshal(body, &user) //! распаковали json
 	if err != nil {
+		fmt.Println(err)
 		http.Error(w, `{"error":"incorrect input"}`, 402)
 		return
 	}

@@ -9,7 +9,7 @@ import (
 type User struct {
 	ID       int             `json:"user_id"`
 	Name     string          `json:"user_name"`
-	Password string          `json:"user_passwords"`
+	Password string          `json:"user_password"`
 	Cart     *ProductStorage `json:"user_cart"`
 }
 

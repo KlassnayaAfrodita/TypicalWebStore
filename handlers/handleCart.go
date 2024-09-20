@@ -34,33 +34,33 @@ func (api *Api) GetAllCart(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
 		http.Error(w, `{"error": "you dont auth"}`, 400)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	userID, err := api.session.GetSession(cookie.Value)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	user, err := api.users.GetUser(userID)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	products, err := user.Cart.GetProducts()
 	if err != nil {
 		http.Error(w, err.Error(), 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	resp, err := json.Marshal(products)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	w.Write(resp)
@@ -70,19 +70,19 @@ func (api *Api) GetProductCart(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
 		http.Error(w, `{"error": "you dont auth"}`, 400)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	userId, err := api.session.GetSession(cookie.Value)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	user, err := api.users.GetUser(userId)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
@@ -90,21 +90,21 @@ func (api *Api) GetProductCart(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(vars["product_id"])
 	if err != nil {
 		http.Error(w, `{"error": "bad id"}`, 400)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	product, err := user.Cart.GetProduct(id)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	resp, err := json.Marshal(product)
 	if err != nil {
 		http.Error(w, `"error": "server error"`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
@@ -116,25 +116,25 @@ func (api *Api) AddProductCart(w http.ResponseWriter, r *http.Request) { //! о�
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
 		http.Error(w, `{"error": "you dont auth"}`, 400)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	userId, err := api.session.GetSession(cookie.Value)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	user, err := api.users.GetUser(userId)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
@@ -143,7 +143,7 @@ func (api *Api) AddProductCart(w http.ResponseWriter, r *http.Request) { //! о�
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, `{"error": "server error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	defer r.Body.Close()
@@ -151,14 +151,14 @@ func (api *Api) AddProductCart(w http.ResponseWriter, r *http.Request) { //! о�
 	newerr := json.Unmarshal(body, &product)
 	if newerr != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	_, err = user.Cart.AddProduct(product)
 	if err != nil {
 		http.Error(w, `"error":"db error"`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
@@ -166,13 +166,13 @@ func (api *Api) AddProductCart(w http.ResponseWriter, r *http.Request) { //! о�
 	productOrigin, err := api.productStorage.GetProduct(product.ID)
 	if err != nil {
 		http.Error(w, `"error":"product not found"`, 404)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	if productOrigin.Quantity-product.Quantity < 0 {
 		http.Error(w, `{"error":"product is missing"}`, 400)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
@@ -188,25 +188,25 @@ func (api *Api) ChangeProductCart(w http.ResponseWriter, r *http.Request) { //! 
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
 		http.Error(w, `{"error": "you dont auth"}`, 400)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	userId, err := api.session.GetSession(cookie.Value)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	user, err := api.users.GetUser(userId)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	if r.Method != http.MethodPut {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
@@ -215,7 +215,7 @@ func (api *Api) ChangeProductCart(w http.ResponseWriter, r *http.Request) { //! 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, `{"error": "server error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	defer r.Body.Close()
@@ -223,14 +223,14 @@ func (api *Api) ChangeProductCart(w http.ResponseWriter, r *http.Request) { //! 
 	newerr := json.Unmarshal(body, &product)
 	if newerr != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	_, err = user.Cart.ChangeProduct(product)
 	if err != nil {
 		http.Error(w, `"error":"db error"`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	w.Write(body)
@@ -241,19 +241,19 @@ func (api *Api) DeleteProductCart(w http.ResponseWriter, r *http.Request) { //! 
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
 		http.Error(w, `{"error": "you dont auth"}`, 400)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	userId, err := api.session.GetSession(cookie.Value)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	user, err := api.users.GetUser(userId)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
@@ -261,28 +261,28 @@ func (api *Api) DeleteProductCart(w http.ResponseWriter, r *http.Request) { //! 
 	id, err := strconv.Atoi(vars["product_id"])
 	if err != nil {
 		http.Error(w, `{"error":"bad id"}`, 400)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	product, err := user.Cart.GetProduct(id)
 	if err != nil {
 		http.Error(w, `"error":"db error"`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	product, err = user.Cart.DeleteProduct(product)
 	if err != nil {
 		http.Error(w, `"error":"db error"`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	resp, err := json.Marshal(product)
 	if err != nil {
 		http.Error(w, `"error":"server error"`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
@@ -293,7 +293,7 @@ func (api *Api) CommentProduct(w http.ResponseWriter, r *http.Request) { //! п�
 	//* проверяем метод
 	if r.Method != http.MethodPost {
 		http.Error(w, `{"error":"bad method"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
@@ -301,19 +301,19 @@ func (api *Api) CommentProduct(w http.ResponseWriter, r *http.Request) { //! п�
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
 		http.Error(w, `{"error": "you dont auth"}`, 400)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	userId, err := api.session.GetSession(cookie.Value)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	user, err := api.users.GetUser(userId)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
@@ -322,14 +322,14 @@ func (api *Api) CommentProduct(w http.ResponseWriter, r *http.Request) { //! п�
 	id, err := strconv.Atoi(vars["product_id"]) //TODO переделать другую переменную принимать
 	if err != nil {
 		http.Error(w, `{"error":"bad id"}`, 400)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, `{"error": "server error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	defer r.Body.Close()
@@ -339,7 +339,7 @@ func (api *Api) CommentProduct(w http.ResponseWriter, r *http.Request) { //! п�
 	err = json.Unmarshal(body, &comment)
 	if err != nil {
 		http.Error(w, `{"error":"json error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
@@ -347,7 +347,7 @@ func (api *Api) CommentProduct(w http.ResponseWriter, r *http.Request) { //! п�
 	product, err := user.Cart.GetProduct(id)
 	if err != nil {
 		http.Error(w, `{"error":"db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 

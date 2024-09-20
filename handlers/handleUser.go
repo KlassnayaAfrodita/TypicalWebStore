@@ -18,7 +18,7 @@ func (api *Api) AuthenticationUser(w http.ResponseWriter, r *http.Request) { //!
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, `{"error": "server error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	defer r.Body.Close()
@@ -28,26 +28,26 @@ func (api *Api) AuthenticationUser(w http.ResponseWriter, r *http.Request) { //!
 	newerr := json.Unmarshal(body, &user)
 	if newerr != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	trueUser, err := api.users.GetUser(user.ID)
 	if err != nil {
 		http.Error(w, `{"error":"not found"}`, 404)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	if trueUser.Password != user.Password {
 		http.Error(w, `bad pass`, 400)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	SID, err := api.session.SetSession(trueUser.ID)
 	if err != nil {
 		http.Error(w, `{"error":"db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	cookie := http.Cookie{
@@ -70,7 +70,7 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, `{"error": "server error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 	fmt.Printf("body: %s\n", string(body))
@@ -80,7 +80,7 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(body, &user) //! распаковали json
 	if err != nil {
-		logger.Info("error", err)
+		logger.Error("error", err)
 		http.Error(w, `{"error":"incorrect input"}`, 402)
 		return
 	}
@@ -90,7 +90,7 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 	user, err = api.users.AddUser(user) //! добавили пользоавтеля в бд
 	if err != nil {
 		http.Error(w, `{"error":"db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
@@ -99,7 +99,7 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 	SID, err := api.session.SetSession(user.ID) //! добавили сессию
 	if err != nil {
 		http.Error(w, `{"error":"db error"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
@@ -123,13 +123,13 @@ func (api *Api) LogoutUser(w http.ResponseWriter, r *http.Request) {
 	sess, err := r.Cookie("session_id")
 	if err != nil {
 		http.Error(w, `{"error":"you dont auth"}`, 500)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 
 	if _, err = api.session.GetSession(sess.Value); err != nil { //* если не нашли сессию в бд
 		http.Error(w, `{"error":"no session"`, 401)
-		logger.Info("error", err)
+		logger.Error("error", err)
 		return
 	}
 

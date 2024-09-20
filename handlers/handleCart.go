@@ -293,7 +293,6 @@ func (api *Api) CommentProduct(w http.ResponseWriter, r *http.Request) { //! п�
 	//* проверяем метод
 	if r.Method != http.MethodPost {
 		http.Error(w, `{"error":"bad method"}`, 500)
-		logger.Error("error", err)
 		return
 	}
 

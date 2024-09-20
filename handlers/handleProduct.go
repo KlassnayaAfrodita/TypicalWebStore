@@ -12,7 +12,7 @@ func (api *Api) GetAllProduct(w http.ResponseWriter, r *http.Request) {
 	products, err := api.productStorage.GetProducts()
 	if err != nil {
 		http.Error(w, `{"error":"db error"}`, 500)
-		logger.Info(err)
+		logger.Error("error", err)
 		return
 	}
 

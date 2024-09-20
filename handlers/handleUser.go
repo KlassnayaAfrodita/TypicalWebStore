@@ -84,12 +84,14 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 	user, err = api.users.AddUser(user) //! добавили пользоавтеля в бд
 	if err != nil {
 		http.Error(w, `{"error":"db error"}`, 500)
+		fmt.Println(err)
 		return
 	}
 
 	SID, err := api.session.SetSession(user.ID) //! добавили сессию
 	if err != nil {
 		http.Error(w, `{"error":"db error"}`, 500)
+		fmt.Println(err)
 		return
 	}
 

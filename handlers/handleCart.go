@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"strconv"
@@ -30,6 +31,7 @@ func (api *Api) GetAllCart(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
 		http.Error(w, `{"error": "you dont auth"}`, 400)
+		fmt.Println(err)
 		return
 	}
 	userID, err := api.session.GetSession(cookie.Value)

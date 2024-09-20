@@ -93,7 +93,8 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(user)
+	fmt.Println(api.users)
+	fmt.Println(api.session)
 
 	cookie := http.Cookie{
 		Name:    "session_id",

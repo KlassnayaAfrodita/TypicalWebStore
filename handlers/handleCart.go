@@ -233,3 +233,66 @@ func (api *Api) DeleteProductCart(w http.ResponseWriter, r *http.Request) { //! 
 
 	w.Write(resp)
 }
+
+func (api *Api) CommentProduct(w http.ResponseWriter, r *http.Request) { //! принимаем post json продукта и конкретный продукт
+	//* проверяем метод
+	if r.Method != http.MethodPost {
+		http.Error(w, `{"error":"bad method"}`, 500)
+	}
+
+	//* получаем конкретного юзера
+	cookie, err := r.Cookie("session_id")
+	if err != nil {
+		http.Error(w, `{"error": "you dont auth"}`, 400)
+		return
+	}
+	userId, err := api.session.GetSession(cookie.Value)
+	if err != nil {
+		http.Error(w, `{"error": "db error"}`, 500)
+		return
+	}
+	user, err := api.users.GetUser(userId)
+	if err != nil {
+		http.Error(w, `{"error": "db error"}`, 500)
+		return
+	}
+
+	//* получаем продукт
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["product_id"]) //TODO переделать другую переменную принимать
+	if err != nil {
+		http.Error(w, `{"error":"bad id"}`, 400)
+		return
+	}
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, `{"error": "server error"}`, 500)
+		return
+	}
+	defer r.Body.Close()
+
+	var comment storage.Comment
+
+	err = json.Unmarshal(body, &comment)
+	if err != nil {
+		http.Error(w, `{"error":"json error"}`, 500)
+		return
+	}
+
+	//TODO бизнес логика
+	product, err := user.Cart.GetProduct(id)
+
+	newProduct := storage.Product{
+		ID:       product.ID,
+		Name:     product.Name,
+		Price:    product.Price,
+		Quantity: product.Quantity,
+		About:    product.About,
+		Comments: append(product.Comments, &comment),
+	}
+
+	api.productStorage.ChangeProduct(newProduct)
+
+	http.Redirect(w, r, "/cart/comments", 400)
+}

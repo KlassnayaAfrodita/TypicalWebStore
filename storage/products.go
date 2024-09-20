@@ -7,12 +7,19 @@ import (
 
 var NotFound = errors.New("not found")
 
+type Comment struct {
+	ID     int    `json:"comment_id"`
+	Rating int    `json:"camment_rating"`
+	Review string `json:"comment_review"`
+}
+
 type Product struct {
-	ID       int     `json:"product_id"`
-	Name     string  `json:"product_name"`
-	Price    float32 `json:"product_price"`
-	Quantity int     `json:"product_quantity"`
-	About    string  `json:"product_about"`
+	ID       int        `json:"product_id"`
+	Name     string     `json:"product_name"`
+	Price    float32    `json:"product_price"`
+	Quantity int        `json:"product_quantity"`
+	About    string     `json:"product_about"`
+	Comments []*Comment `json:"product_comments`
 }
 
 type ProductStorage struct {

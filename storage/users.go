@@ -6,11 +6,18 @@ import (
 
 // var NotFound = errors.New("not found")
 
+type Comment struct {
+	ID     int    `json:"comment_id"`
+	Rating int    `json:"camment_rating"`
+	Review string `json:"comment_review"`
+}
+
 type User struct {
 	ID       int             `json:"user_id"`
 	Name     string          `json:"user_name"`
 	Password string          `json:"user_passwords"`
 	Cart     *ProductStorage `json:"user_cart"`
+	Comments []*Comment
 }
 
 type UserStorage struct {

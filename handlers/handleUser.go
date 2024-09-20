@@ -86,6 +86,7 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user.Cart = storage.NewProductStorage()
+	fmt.Println(user.Cart)
 
 	user, err = api.users.AddUser(user) //! добавили пользоавтеля в бд
 	if err != nil {
@@ -103,8 +104,8 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(&api.users)
-	fmt.Println(&api.session)
+	fmt.Println(api.users)
+	fmt.Println(api.session)
 
 	cookie := http.Cookie{
 		Name:    "session_id",

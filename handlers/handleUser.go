@@ -79,6 +79,8 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	user.Cart = storage.NewProductStorage()
+
 	user, err = api.users.AddUser(user) //! добавили пользоавтеля в бд
 	if err != nil {
 		http.Error(w, `{"error":"db error"}`, 500)

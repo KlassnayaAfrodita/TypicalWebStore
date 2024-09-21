@@ -19,6 +19,12 @@ type UserStorage struct {
 	nextID int
 }
 
+// func NewEmptyUser(id int, name, pass string) *User {
+// 	return &User{
+
+// 	}
+// }
+
 func NewUserStorage() *UserStorage {
 	return &UserStorage{
 		users: map[int]User{},

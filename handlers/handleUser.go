@@ -59,7 +59,7 @@ func (api *Api) AuthenticationUser(w http.ResponseWriter, r *http.Request) { //!
 	http.SetCookie(w, &cookie)
 	// r.AddCookie(&cookie)
 
-	http.Redirect(w, r, "/products", 200)
+	http.Redirect(w, r, "/products", 300)
 }
 
 func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
@@ -117,7 +117,7 @@ func (api *Api) RegistrationUser(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &cookie)
 	// r.AddCookie(&cookie)
 
-	http.Redirect(w, r, "/products", 200)
+	http.Redirect(w, r, "/products", 300)
 }
 
 func (api *Api) LogoutUser(w http.ResponseWriter, r *http.Request) {

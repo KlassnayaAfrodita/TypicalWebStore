@@ -30,16 +30,8 @@ type ProductStorage struct {
 
 func NewProductStorage() *ProductStorage {
 	return &ProductStorage{
-		products: map[int]Product{
-			1: Product{
-				ID:       1,
-				Name:     "laptop",
-				Price:    1000.,
-				Quantity: 5,
-				About:    "laptop",
-			},
-		},
-		mu: &sync.RWMutex{},
+		products: map[int]Product{},
+		mu:       &sync.RWMutex{},
 	}
 }
 

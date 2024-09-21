@@ -51,3 +51,19 @@ func (api *Api) GetProduct(w http.ResponseWriter, r *http.Request) { //! у на
 
 	w.Write(resp)
 }
+
+//TODO реализовать доступ только продовцу
+// func (api *Api) AddProduct(w http.ResponseWriter, r *http.Request) { //! принимаем post json
+// 	body, err := io.ReadAll(r.Body)
+// 	if err != nil {
+// 		http.Error(w, `{"error": "server error"}`, 500)
+// 		logger.Error("error", err)
+// 		return
+// 	}
+// 	defer r.Body.Close()
+
+// 	var product storage.Product
+
+// 	err = json.Unmarshal(body, product)
+// 	if
+// }

@@ -22,17 +22,21 @@ type Api struct {
 }
 
 func NewApi() *Api {
+	productStorage, err := storage.NewProductStorage().AddProduct(storage.Product{
+		ID:       1,
+		Name:     "laptop",
+		Price:    1000.,
+		Quantity: 5,
+		About:    "laptop",
+		Comments: []storage.Product{},
+	})
+	if err != nil {
+		panic(err)
+	}
 	return &Api{
-		session: storage.NewSession(),
-		users:   storage.NewUserStorage(),
-		productStorage: storage.NewProductStorage().AddProduct(storage.Product{
-			ID:       1,
-			Name:     "laptop",
-			Price:    1000.,
-			Quantity: 5,
-			About:    "laptop",
-			Comments: []storage.Product,
-		}),
+		session:        storage.NewSession(),
+		users:          storage.NewUserStorage(),
+		productStorage: productStorage,
 	}
 }
 

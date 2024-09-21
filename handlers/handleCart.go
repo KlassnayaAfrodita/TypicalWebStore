@@ -28,7 +28,6 @@ func NewApi() *Api {
 		Price:    1000.,
 		Quantity: 5,
 		About:    "laptop",
-		Comments: []storage.Product{},
 	})
 	if err != nil {
 		panic(err)
@@ -36,7 +35,7 @@ func NewApi() *Api {
 	return &Api{
 		session:        storage.NewSession(),
 		users:          storage.NewUserStorage(),
-		productStorage: productStorage,
+		productStorage: &productStorage,
 	}
 }
 

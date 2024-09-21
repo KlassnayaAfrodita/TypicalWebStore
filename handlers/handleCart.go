@@ -23,9 +23,16 @@ type Api struct {
 
 func NewApi() *Api {
 	return &Api{
-		session:        storage.NewSession(),
-		users:          storage.NewUserStorage(),
-		productStorage: storage.NewProductStorage(),
+		session: storage.NewSession(),
+		users:   storage.NewUserStorage(),
+		productStorage: storage.NewProductStorage().AddProduct(storage.Product{
+			ID:       1,
+			Name:     "laptop",
+			Price:    1000.,
+			Quantity: 5,
+			About:    "laptop",
+			Comments: []storage.Product,
+		}),
 	}
 }
 

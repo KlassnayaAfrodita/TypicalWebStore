@@ -22,7 +22,8 @@ type Api struct {
 }
 
 func NewApi() *Api {
-	productStorage, err := storage.NewProductStorage().AddProduct(storage.Product{
+	productStorage := storage.NewProductStorage()
+	_, err := productStorage.AddProduct(storage.Product{
 		ID:       1,
 		Name:     "laptop",
 		Price:    1000.,

@@ -98,7 +98,7 @@ func (api *Api) GetProductCart(w http.ResponseWriter, r *http.Request) {
 	}
 
 	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["product_id"])
+	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		http.Error(w, `{"error": "bad id"}`, 400)
 		logger.Error("error", err)
@@ -269,7 +269,7 @@ func (api *Api) DeleteProductCart(w http.ResponseWriter, r *http.Request) { //! 
 	}
 
 	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["product_id"])
+	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		http.Error(w, `{"error":"bad id"}`, 400)
 		logger.Error("error", err)

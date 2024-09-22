@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log/slog"
 	"net/http"
@@ -99,6 +100,7 @@ func (api *Api) GetProductCart(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
+	fmt.Println(id, err)
 	if err != nil {
 		http.Error(w, `{"error": "bad id"}`, 400)
 		logger.Error("error", err)

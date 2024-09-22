@@ -36,7 +36,7 @@ func NewApi() *Api {
 	return &Api{
 		session:        storage.NewSession(),
 		users:          storage.NewUserStorage(),
-		productStorage: &productStorage,
+		productStorage: productStorage,
 	}
 }
 

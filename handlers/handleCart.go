@@ -299,6 +299,22 @@ func (api *Api) DeleteProductCart(w http.ResponseWriter, r *http.Request) { //! 
 		return
 	}
 
+	//? при удалении, добавляем в основную бд те товары, что лежали в корзине
+	productOrigin, err := api.productStorage.GetProduct(product.ID)
+	if err != nil {
+		http.Error(w, `"error":"product not found"`, 404)
+		logger.Error("error", err)
+		return
+	}
+
+	productOrigin.Quantity = productOrigin.Quantity + product.Quantity
+	_, err = api.productStorage.ChangeProduct(productOrigin)
+	if err != nil {
+		http.Error(w, `"error":"db error"`, 500)
+		logger.Error("error", err)
+		return
+	}
+
 	w.Write(resp)
 }
 
@@ -316,12 +332,14 @@ func (api *Api) CommentProduct(w http.ResponseWriter, r *http.Request) { //! п�
 		logger.Error("error", err)
 		return
 	}
+
 	userId, err := api.session.GetSession(cookie.Value)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
 		logger.Error("error", err)
 		return
 	}
+
 	user, err := api.users.GetUser(userId)
 	if err != nil {
 		http.Error(w, `{"error": "db error"}`, 500)
@@ -331,7 +349,7 @@ func (api *Api) CommentProduct(w http.ResponseWriter, r *http.Request) { //! п�
 
 	//* получаем продукт
 	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"]) //TODO переделать другую переменную принимать
+	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		http.Error(w, `{"error":"bad id"}`, 400)
 		logger.Error("error", err)
@@ -376,5 +394,5 @@ func (api *Api) CommentProduct(w http.ResponseWriter, r *http.Request) { //! п�
 	api.productStorage.ChangeProduct(newProduct)
 	user.Cart.ChangeProduct(newProduct)
 
-	http.Redirect(w, r, "/cart/comments", 400)
+	http.Redirect(w, r, "/cart", 300)
 }

@@ -135,7 +135,12 @@ func (api *Api) LogoutUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_ = api.session.DeleteSession(sess.Value)
+	_, err = api.session.DeleteSession(sess.Value)
+	if err != nil {
+		http.Error(w, `{"error":"db error"}`, 500)
+		logger.Error("error", err)
+		return
+	}
 
 	sess.Expires = time.Now().AddDate(0, 0, -1)
 	http.SetCookie(w, sess)

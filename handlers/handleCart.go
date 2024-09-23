@@ -372,7 +372,9 @@ func (api *Api) CommentProduct(w http.ResponseWriter, r *http.Request) { //! п�
 		Comments: append(product.Comments, &comment),
 	}
 
+	//? меняем общую базу и корзину
 	api.productStorage.ChangeProduct(newProduct)
+	user.Cart.ChangeProduct(newProduct)
 
 	http.Redirect(w, r, "/cart/comments", 400)
 }

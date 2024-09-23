@@ -11,6 +11,7 @@ type User struct {
 	Name     string          `json:"user_name"`
 	Password string          `json:"user_password"`
 	Cart     *ProductStorage `json:"user_cart,omitempty"`
+	// Access   int             `json:"user_access"`
 }
 
 type UserStorage struct {

@@ -31,7 +31,7 @@ func (api *Api) AuthenticationUser(w http.ResponseWriter, r *http.Request) { //!
 		return
 	}
 
-	trueUser, err := api.users.GetUser(user.ID)
+	trueUser, err := api.users.GetUserByName(user.Name)
 	if err != nil {
 		http.Error(w, `{"error":"not found"}`, 404)
 		logger.Error("error", err)

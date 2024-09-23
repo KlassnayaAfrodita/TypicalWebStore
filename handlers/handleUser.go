@@ -130,7 +130,7 @@ func (api *Api) LogoutUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if _, err = api.session.GetSession(sess.Value); err != nil { //* если не нашли сессию в бд
-		http.Error(w, `{"error":"no session"`, 401)
+		http.Error(w, `{"error":"no session}"`, 401)
 		logger.Error("error", err)
 		return
 	}

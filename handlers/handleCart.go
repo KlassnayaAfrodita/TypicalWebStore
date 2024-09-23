@@ -331,7 +331,7 @@ func (api *Api) CommentProduct(w http.ResponseWriter, r *http.Request) { //! п�
 
 	//* получаем продукт
 	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["product_id"]) //TODO переделать другую переменную принимать
+	id, err := strconv.Atoi(vars["id"]) //TODO переделать другую переменную принимать
 	if err != nil {
 		http.Error(w, `{"error":"bad id"}`, 400)
 		logger.Error("error", err)
